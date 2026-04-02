@@ -3,12 +3,15 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="description" content="LoVR: A Benchmark for Long Video Retrieval in Multimodal Contexts">
-  <meta name="keywords" content="Video-Text Retrieval, Multimodal, Benchmark, Long Video">
+  <meta name="description"
+    content="LongVidSearch: An Agentic Benchmark for Multi-hop Evidence Retrieval Planning in Long Videos">
+  <meta name="keywords"
+    content="LongVidSearch, Long Video, Multi-hop, Evidence Retrieval, Agentic Benchmark, Video QA">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>LoVR: A Benchmark for Long Video Retrieval</title>
+  <title>LongVidSearch</title>
 
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Google+Sans:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap"
+    rel="stylesheet">
 
   <link rel="stylesheet" href="./static/css/bulma.min.css">
   <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
@@ -16,110 +19,374 @@
   <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
-  <link rel="stylesheet" href="./static/css/leaderboard.css">
   <link rel="icon" href="">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="./static/js/fontawesome.all.min.js"></script>
-  <script defer src="./static/js/sort-table.js"></script>
   <script src="./static/js/bulma-carousel.min.js"></script>
   <script src="./static/js/bulma-slider.min.js"></script>
+
+  <style>
+    /* Dataset Statistics: 5 columns, spread evenly */
+    .table-dataset {
+      table-layout: fixed;
+      width: 100%;
+    }
+    .table-dataset th,
+    .table-dataset td {
+      text-align: center !important;
+    }
+    .table-dataset th:first-child,
+    .table-dataset td:first-child {
+      width: 28%;
+      text-align: left !important;
+      padding-left: 1.5rem;
+      font-weight: 500;
+    }
+
+    /* Accuracy Table 1: 14 columns, let content decide */
+    .table-accuracy {
+      table-layout: auto;
+      width: 100%;
+    }
+
+    /* Human Verification Table 2: 4 columns, spread evenly */
+    .table-verify {
+      table-layout: fixed;
+      width: 100%;
+    }
+    .table-verify th:first-child,
+    .table-verify td:first-child {
+      width: 35%;
+      text-align: left !important;
+      padding-left: 1.5rem;
+    }
+
+    /* Oracle Table 3: 4 columns, spread evenly */
+    .table-oracle {
+      table-layout: fixed;
+      width: 100%;
+    }
+    .table-oracle th:first-child,
+    .table-oracle td:first-child {
+      width: 35%;
+      text-align: left !important;
+      padding-left: 1.5rem;
+    }
+    .table-oracle .gap-cell {
+      color: #d93025;
+      font-weight: 600;
+    }
+    /* Standardized Tools Card */
+    .tools-card {
+      background: #ffffff;
+      border: 1px solid #e8eaed;
+      border-radius: 14px;
+      padding: 2rem 2.5rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+    .tools-intro {
+      font-size: 0.95rem;
+      color: #5f6368;
+      margin-bottom: 1.5rem !important;
+    }
+    .tool-item {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+      border-left: 3px solid #4285f4;
+    }
+    .tool-signature {
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #1a73e8;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .tool-params {
+      color: #5f6368;
+      font-weight: 400;
+    }
+    .tool-desc {
+      font-size: 0.88rem;
+      color: #3c4043;
+      line-height: 1.5;
+    }
+    .tools-note {
+      margin-top: 1.5rem !important;
+      font-size: 0.9rem;
+      color: #5f6368;
+      padding-top: 1rem;
+      border-top: 1px solid #e8eaed;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', 'Georgia', serif;
+      font-weight: 500;
+      font-size: 4.2rem;
+      letter-spacing: 0.04em;
+      color: #1a1a2e;
+      line-height: 1.1;
+      margin-bottom: 0.4rem;
+    }
+
+    .content-width {
+      max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+      width: auto;
+      padding-left: auto;
+      padding-right: auto;
+    }
+    
+    .content-width-1 {
+      max-width: 540px;
+      margin-left: auto;
+      margin-right: auto;
+      width: auto;
+      padding-left: auto;
+      padding-right: auto;
+    }
+    
+    .content-width-2 {
+      max-width:880px;
+      margin-left: auto;
+      margin-right: auto;
+      width: auto;
+      padding-left: auto;
+      padding-right: auto;
+    }
+      .content-width-3 {
+        max-width:380px;
+        margin-left: auto;
+        margin-right: auto;
+        width: auto;
+        padding-left: auto;
+        padding-right: auto;
+      }
+      .content-width-4 {
+        max-width:500px;
+        margin-left: auto;
+        margin-right: auto;
+        width: auto;
+        padding-left: auto;
+        padding-right: auto;
+      }
+      
+    .hero-subtitle {
+      font-family: 'Google Sans', 'Noto Sans', sans-serif;
+      font-weight: 400;
+      font-size: 1.25rem;
+      color: #555;
+      line-height: 1.5;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .table-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04);
+      overflow: hidden;
+      margin: 0 auto;
+    }
+
+        .table-card-title {
+      font-family: 'Google Sans', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 1rem 1.5rem 0.6rem;
+      color: #1a1a2e;
+      border-bottom: 1px solid #f0f0f0;
+      text-align: center;
+    }
+
+    .results-table {
+      font-family: 'Google Sans', 'Noto Sans', sans-serif;
+      font-size: 0.82rem;
+      border-collapse: separate;
+      border-spacing: 0;
+      width: 100%;
+    }
+
+    .results-table th,
+    .results-table td {
+      padding: 10px 10px;
+      text-align: center;
+    }
+
+    .results-table thead th {
+      background: #fafbfc;
+      color: #5f6368;
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 2px solid #e8eaed;
+    }
+
+    .results-table tbody td {
+      border-bottom: 1px solid #f3f4f6;
+      color: #3c4043;
+    }
+
+    .results-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .results-table tbody tr:hover td {
+      background: #f8f9ff;
+    }
+
+    .results-table .group-header {
+      font-weight: 700;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 8px 10px;
+    }
+
+    .results-table .group-closed {
+      background: linear-gradient(90deg, #e8f0fe, #f0f4ff);
+      color: #1a56db;
+    }
+
+    .results-table .group-open {
+      background: linear-gradient(90deg, #e6f4ea, #ecfdf5);
+      color: #137333;
+    }
+
+    .results-table .best-row td {
+      background: linear-gradient(90deg, rgba(66, 133, 244, 0.04), rgba(66, 133, 244, 0.02));
+    }
+
+    .results-table .overall-row td {
+      font-weight: 700;
+      background: #f8f9fa;
+      border-top: 2px solid #e8eaed;
+    }
+
+    .highlight-cell {
+      font-weight: 700;
+      color: #1a56db;
+    }
+
+    .model-name {
+      text-align: left !important;
+      font-weight: 500;
+      color: #202124;
+    }
+
+    .insight-box {
+      background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+      border-left: 4px solid #4285f4;
+      border-radius: 0 12px 12px 0;
+      padding: 1.2rem 1.5rem;
+      margin: 1.5rem 0;
+      font-size: 0.95rem;
+    }
+
+    .insight-box p {
+      margin-bottom: 0.5rem;
+    }
+
+    .insight-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    .scroll-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 4px;
+    }
+
+    .scroll-wrapper::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .scroll-wrapper::-webkit-scrollbar-thumb {
+      background: #d1d5db;
+      border-radius: 3px;
+    }
+  </style>
 </head>
 
 <body>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      updateRowNumbers("#retrieval-results");
 
-      document.querySelector("#retrieval-results").addEventListener("click", function () {
-        updateRowNumbers("#retrieval-results");
-      });
-    });
-
-    function updateRowNumbers(tableId) {
-      const rows = document.querySelectorAll(`${tableId} tbody tr`);
-      rows.forEach((row, index) => {
-        row.querySelector("td").innerText = index + 1;
-      });
-    }
-  </script>
-
-  <style>
-    .no-sort {
-      cursor: default;
-      pointer-events: none;
-      background-image: none !important;
-    }
-  </style>
-
-  <!-- Hero Header Section. -->
+  <!-- Hero Header -->
   <section class="hero">
     <div class="hero-body">
       <div class="container is-max-desktop">
         <div class="columns is-centered">
           <div class="column has-text-centered">
-            <h1 class="title is-3 publication-title">LoVR: A Benchmark for Long Video Retrieval in Multimodal Contexts</h1>
-            <div class="is-size-5 publication-authors">
+            <h1 class="hero-title">LongVidSearch</h1>
+            <p class="hero-subtitle">
+              An Agentic Benchmark for Multi-hop Evidence Retrieval Planning in Long Videos
+            </p>
+
+            <div class="is-size-5 publication-authors" style="margin-top: 1.5rem;">
               <span class="author-block">
-                <a>Qifeng Cai</a><sup style="color: #6fbf73;"></sup>,</span>
+                <a href="mailto:yrywill@outlook.com">Rongyi Yu</a><sup
+                  style="color:#6fbf73;">1</sup><sup>*</sup>,</span>
               <span class="author-block">
-                <a>Hao Liang</a><sup style="color: #6fbf73;"></sup>,</span>
+                <a href="mailto:ChenyuanDuan04@gmail.com">Chenyuan Duan</a><sup
+                  style="color:#6fbf73;">1</sup><sup>*</sup>,</span>
               <span class="author-block">
-                <a>Zhaoyang Han</a><sup style="color: #6fbf73;"></sup>,</span>
+                <a href="mailto:hao.liang@stu.pku.edu.cn">Hao Liang</a><sup
+                  style="color:#6fbf73;">1</sup>,</span>
               <span class="author-block">
-                <a>Hejun Dong</a><sup style="color: #ed4b82;"></sup>,</span>
+                <a href="mailto:shz.alvin@meituan.com">Haoze Sun</a><sup
+                  style="color:#ed4b82;">2</sup>,</span>
               <span class="author-block">
-                <a>Meiyi Qiang</a><sup style="color: #6fbf73;"></sup>,</span>
-              <br>
-              <span class="author-block">
-                <a>Ruichuan An</a><sup style="color: #6fbf73;"></sup>,</span>
-              <span class="author-block">
-                <a>Zhengzhou Zhu</a><sup style="color: #6fbf73;"></sup>,</span>
-              <span class="author-block">
-                <a>Bin Cui</a><sup style="color: #6fbf73;"></sup>,</span>
-              <span class="author-block">
-                <a>Wentao Zhang</a><sup style="color: #6fbf73;"></sup></span>
+                <a href="mailto:peipeng@meituan.com">Peng Pei</a><sup
+                  style="color:#ed4b82;">2</sup><sup>&dagger;</sup></span>
+            </div>
+            <div class="is-size-6 publication-authors" style="margin-top: 0.5rem;">
+              <span class="author-block"><sup style="color:#6fbf73;">1</sup> Peking University</span>
+              &nbsp;&nbsp;
+              <span class="author-block"><sup style="color:#ed4b82;">2</sup> Meituan</span>
+            </div>
+            <div class="is-size-7" style="margin-top: 0.3rem; color: #888;">
+              <sup>*</sup> Equal contribution &nbsp;&nbsp; <sup>&dagger;</sup> Corresponding author
             </div>
             <br>
+
+            <!-- Four Navigation Links -->
             <div class="column has-text-centered">
               <div class="publication-links">
-                <!-- PDF Link. -->
                 <span class="link-block">
-                  <a href="https://arxiv.org/abs/2505.13928" class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon">
-                      <i class="ai ai-arxiv"></i>
-                    </span>
-                    <span>Paper</span>
+                  <a href="https://arxiv.org/abs/2603.14468"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="ai ai-arxiv"></i></span>
+                    <span>ArXiv</span>
                   </a>
                 </span>
-
-                <!-- Code Link. -->
                 <span class="link-block">
-                  <a href="https://github.com/TechNomad-ds/LoVR-benchmark" class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon">
-                      <i class="fab fa-github"></i>
-                    </span>
+                  <a href="https://github.com/yrywill/LongVidSearch"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fab fa-github"></i></span>
                     <span>Code</span>
                   </a>
                 </span>
-                <!-- Dataset Link. -->
                 <span class="link-block">
-                  <a href="https://huggingface.co/datasets/debugger123/LoVR-benchmark" class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon">
-                      <i class="far fa-images"></i>
-                    </span>
+                  <a href="https://huggingface.co/datasets/Fishiing/LongVidSearch"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="far fa-images"></i></span>
                     <span>Data</span>
                   </a>
                 </span>
-                <!-- Leaderboard Link. -->
-                <!-- <span class="link-block">
-                  <a href="#leaderboard" class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon">
-                      <i class="fa fa-trophy"></i>
-                    </span>
-                    <span>Leaderboard</span>
+                <span class="link-block">
+                  <a href="https://huggingface.co/datasets/debugger123/LoVR-benchmark/tree/main/video_data"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-video"></i></span>
+                    <span>Video Resource</span>
                   </a>
-                </span> -->
+                </span>
               </div>
             </div>
           </div>
@@ -128,136 +395,455 @@
     </div>
   </section>
 
-  <section class="hero teaser">
-    <div class="container is-max-desktop">
-      <div class="hero-body">
-        <img src="./static/images/face.png" alt="comparison of captions" />
-      </div>
+  <!-- Teaser Figure -->
+  <section class="section" style="padding-top: 0; padding-bottom: 2rem;">
+    <div class="content-width">
+      <img src="./static/images/mm-retrieval.pdf.png" alt="LongVidSearch benchmark framework"
+        style="width:100%; border-radius: 8px;" />
+      <p class="has-text-centered" style="font-size: 14px; color: #666; margin-top: 10px;">
+        <b>Figure 1:</b> Overview of LongVidSearch. Agents iteratively retrieve clips and read captions
+        via standardized tools, and are evaluated by a three-judge majority-vote protocol.
+      </p>
     </div>
   </section>
 
-  <!-- Abstract Section. -->
+  <!-- Abstract -->
   <section class="section">
-    <div class="container is-max-widescreen">
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          <h2 class="title is-3">Abstract</h2>
-          <div class="content has-text-justified">
+    <div class="content-width">
+      <h2 class="title is-3 has-text-centered">Abstract</h2>
+      <div class="content has-text-justified">
             <p>
-              Long videos contain a vast amount of information, making video-text retrieval an essential and challenging task in multimodal learning and web-scale search. On today's Web, where users increasingly expect to locate not only relevant pages but also specific long videos or fine-grained clips, existing benchmarks fall short due to limited video duration, low-quality captions, and coarse annotation granularity.
+              Long video question answering (Long-Video QA) increasingly relies on agentic tool use to retrieve
+              evidence from long videos. In realistic settings, this process often requires <b>multi-hop
+                retrieval</b>, where agents must iteratively gather multiple discontinuous evidence clips. However,
+              existing long-video benchmarks are largely static: they rarely enforce strict multi-hop retrieval and
+              typically lack a standardized evidence-access interface, making it difficult to separate failures in
+              retrieval planning from those in answer generation.
             </p>
             <p>
-              To address these limitations, we introduce <b>LoVR</b>, a benchmark specifically designed for long video-text retrieval. <b>LoVR</b> contains <b>467 long videos</b> and over <b>40,804 fine-grained clips</b> with high-quality captions.
-              To overcome the issue of poor machine-generated annotations, we propose an efficient caption generation framework that integrates VLM automatic generation, caption quality scoring, and dynamic refinement. This pipeline improves annotation accuracy while maintaining scalability. Furthermore, we introduce a semantic fusion method to generate coherent full-video captions without losing important contextual information.
+              To address this gap, we introduce <b>LongVidSearch</b>, a benchmark for evaluating agentic multi-hop
+              evidence retrieval planning in long videos under standardized access constraints. LongVidSearch
+              enforces <b>retrieval necessity</b>: a Hop-<i>k</i> question requires exactly <i>k</i> necessary
+              evidence clips, and removing any single clip renders the question unsolvable. The benchmark contains
+              <b>3,000 questions</b> over <b>447 long videos</b> (average length 26 minutes), covering four
+              reasoning categories&mdash;State Mutation, Causal Inference, Global Summary, and Visual
+              Tracking&mdash;with 2-, 3-, and 4-hop evidence requirements.
             </p>
             <p>
-              Our benchmark introduces longer videos, more detailed captions, and a larger-scale dataset, presenting new challenges for video understanding and retrieval. Extensive experiments on various advanced models demonstrate that <b>LoVR</b> is challenging, revealing the limitations of current approaches and providing valuable insights for future research.
+              To ensure fair and controlled evaluation, all agents interact with LongVidSearch through a
+              <b>unified tool interface</b>, which fixes the retrieval backend and isolates the agent&rsquo;s
+              ability to formulate queries and plan iterative retrieval. In addition to answer accuracy, we measure
+              <b>tool-call cost</b> to analyze the accuracy&ndash;efficiency trade-off under identical access
+              conditions.
+            </p>
+            <p>
+              We evaluate VideoAgent-style QA agents with multiple backbone LLMs using three-judge majority voting.
+              <b>GPT-5</b> achieves the highest accuracy (<b>42.43</b>), outperforming Gemini 3 Pro (30.97) and
+              GPT-4o (19.20), yet remaining below 50%, highlighting the difficulty of multi-hop retrieval planning.
+              With gold evidence clips, performance becomes near-perfect, confirming <b>retrieval planning as the
+                primary bottleneck</b>.
             </p>
           </div>
-        </div>
+    </div>
+  </section>
+
+    <!-- Dataset Statistics -->
+  <section class="section" style="padding-top: 0;">
+    <div class="content-width-1">
+      <h2 class="title is-3 has-text-centered">Dataset Statistics</h2>
+      <div class="table-card">
+        <div class="table-card-title">3,000 QA</div>
+        <table class="results-table table-dataset">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>2-Hop</th>
+              <th>3-Hop</th>
+              <th>4-Hop</th>
+              <th>Total (Ratio)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Causal Inference</td>
+              <td>436</td><td>282</td><td>144</td><td><b>862</b> (28.7%)</td>
+            </tr>
+            <tr>
+              <td>Global Summary</td>
+              <td>512</td><td>181</td><td>166</td><td><b>859</b> (28.6%)</td>
+            </tr>
+            <tr>
+              <td>Visual Tracking</td>
+              <td>653</td><td>136</td><td>61</td><td><b>850</b> (28.3%)</td>
+            </tr>
+            <tr>
+              <td>State Mutation</td>
+              <td>238</td><td>119</td><td>72</td><td><b>429</b> (14.3%)</td>
+            </tr>
+            <tr class="overall-row">
+              <td><b>Overall</b></td>
+              <td><b>1,839</b> (61.3%)</td><td><b>718</b> (23.9%)</td><td><b>443</b> (14.8%)</td><td><b>3,000</b> (100%)</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </section>
 
-  <!-- Introduction Section. -->
-  <section class="section">
-    <div class="container is-max-widescreen">
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          <h2 class="title is-3">Introduction</h2>
-          <div class="content has-text-justified">
-            <p>
-              🌟 <b>LoVR</b> is a novel benchmark specifically designed for <b>long video-text retrieval</b>, addressing key limitations in existing datasets such as short video duration, low-quality captions, and insufficient annotation granularity.
-            </p>
-            <img src="./static/images/overview.png" alt="LoVR Pipeline Overview" />
-            <p class="has-text-centered" style="font-size: 14px; color: #666; margin-top: 10px;">
-              Overview of the data construction pipeline in <b>LoVR</b>. Step 1 segments long videos into high-dynamic clips. Step 2 generates high-quality clip-level captions via iterative VLM captioning. Step 3 constructs long-video captions by clustering and summarizing clip captions.
-            </p>
-            <hr style="border: 0; height: 1px; background-color: #f0f0f0; margin: 30px 0;">
-            <p>
-              📊 <b>Key Features:</b>
-            </p>
-            <ul>
-              <li><b>Long Videos:</b> 467 videos exceeding 15 minutes (avg. ~26 min), totaling over 200 hours</li>
-              <li><b>Fine-grained Clips:</b> 40,804 clips with high-quality captions</li>
-              <li><b>Rich Annotations:</b> Both clip-level and video-level captions with scene, atmosphere, and theme information</li>
-              <li><b>Scalable Pipeline:</b> VLM + Human hybrid annotation ensuring quality and efficiency</li>
-            </ul>
-            <hr style="border: 0; height: 1px; background-color: #f0f0f0; margin: 30px 0;">
-          </div>
+  <!-- Results: Accuracy Table -->
+  <section class="section" style="padding-top: 0;">
+    <div class="content-width-2">
+      <h2 class="title is-3 has-text-centered">Results</h2>
+
+      <div class="table-card">
+        <div class="table-card-title">Accuracy (%) by Model, Category &amp; Hop Level</div>
+        <div class="scroll-wrapper">
+          <table class="results-table table-accuracy">
+            <thead>
+              <tr>
+                <th rowspan="2" style="min-width:150px; text-align:left; padding-left:1.2rem;">Model</th>
+                <th rowspan="2" style="min-width:70px;">Overall</th>
+                <th colspan="3" style="border-bottom:2px solid #c5cae9;">State Mutation</th>
+                <th colspan="3" style="border-bottom:2px solid #ffcc80;">Causal Inference</th>
+                <th colspan="3" style="border-bottom:2px solid #a5d6a7;">Global Summary</th>
+                <th colspan="3" style="border-bottom:2px solid #ef9a9a;">Visual Tracking</th>
+              </tr>
+              <tr>
+                <th>2h</th><th>3h</th><th>4h</th>
+                <th>2h</th><th>3h</th><th>4h</th>
+                <th>2h</th><th>3h</th><th>4h</th>
+                <th>2h</th><th>3h</th><th>4h</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="14" class="group-header group-closed">Closed-Source LLMs</td></tr>
+              <tr class="best-row">
+                <td class="model-name" style="padding-left:1.2rem;">GPT-5</td>
+                <td class="highlight-cell">42.43</td>
+                <td class="highlight-cell">38.24</td><td class="highlight-cell">36.13</td><td class="highlight-cell">22.22</td>
+                <td class="highlight-cell">47.71</td><td class="highlight-cell">43.97</td><td class="highlight-cell">39.58</td>
+                <td class="highlight-cell">44.34</td><td class="highlight-cell">35.36</td><td class="highlight-cell">29.52</td>
+                <td class="highlight-cell">49.77</td><td class="highlight-cell">37.50</td><td class="highlight-cell">29.51</td>
+              </tr>
+              <tr>
+                <td class="model-name" style="padding-left:1.2rem;">Gemini 3 Pro</td>
+                <td>30.97</td>
+                <td>30.25</td><td>18.49</td><td>12.50</td>
+                <td>34.17</td><td>20.92</td><td>17.36</td>
+                <td>36.72</td><td>20.44</td><td>15.66</td>
+                <td>45.48</td><td>25.00</td><td>18.03</td>
+              </tr>
+              <tr>
+                <td class="model-name" style="padding-left:1.2rem;">GPT-4o</td>
+                <td>19.20</td>
+                <td>15.55</td><td>14.29</td><td>12.50</td>
+                <td>20.18</td><td>12.77</td><td>11.81</td>
+                <td>19.73</td><td>13.81</td><td>11.45</td>
+                <td>29.40</td><td>20.59</td><td>11.48</td>
+              </tr>
+              <tr>
+                <td class="model-name" style="padding-left:1.2rem;">GPT-4-mini</td>
+                <td>18.27</td>
+                <td>15.97</td><td>5.93</td><td>4.17</td>
+                <td>15.14</td><td>10.99</td><td>6.25</td>
+                <td>20.31</td><td>16.02</td><td>12.65</td>
+                <td>31.35</td><td>20.59</td><td>11.48</td>
+              </tr>
+              <tr><td colspan="14" class="group-header group-open">Open-Source LLMs</td></tr>
+              <tr class="best-row">
+                <td class="model-name" style="padding-left:1.2rem;">Qwen3-VL-32B</td>
+                <td class="highlight-cell">29.59</td>
+                <td class="highlight-cell">29.74</td><td class="highlight-cell">27.97</td><td class="highlight-cell">15.49</td>
+                <td class="highlight-cell">29.26</td><td class="highlight-cell">22.86</td><td class="highlight-cell">18.44</td>
+                <td class="highlight-cell">34.19</td><td class="highlight-cell">20.99</td><td class="highlight-cell">16.46</td>
+                <td class="highlight-cell">40.43</td><td class="highlight-cell">25.93</td><td class="highlight-cell">22.95</td>
+              </tr>
+              <tr>
+                <td class="model-name" style="padding-left:1.2rem;">Qwen2.5-VL-72B</td>
+                <td>25.30</td>
+                <td>23.95</td><td>17.65</td><td>12.50</td>
+                <td>26.38</td><td>21.99</td><td>15.97</td>
+                <td>29.49</td><td>20.44</td><td>15.06</td>
+                <td>34.00</td><td>22.79</td><td>9.84</td>
+              </tr>
+              <tr>
+                <td class="model-name" style="padding-left:1.2rem;">Qwen3-VL-8B</td>
+                <td>18.58</td>
+                <td>16.67</td><td>12.71</td><td>9.72</td>
+                <td>14.81</td><td>11.43</td><td>11.19</td>
+                <td>20.59</td><td>16.67</td><td>15.34</td>
+                <td>28.84</td><td>17.78</td><td>15.25</td>
+              </tr>
+              <tr>
+                <td class="model-name" style="padding-left:1.2rem;">Qwen2.5-7B</td>
+                <td>11.10</td>
+                <td>10.92</td><td>4.20</td><td>4.17</td>
+                <td>8.72</td><td>5.32</td><td>4.86</td>
+                <td>15.82</td><td>7.73</td><td>3.61</td>
+                <td>18.99</td><td>7.35</td><td>6.56</td>
+              </tr>
+              <tr>
+                <td class="model-name" style="padding-left:1.2rem;">Qwen2.5-VL-7B</td>
+                <td>10.41</td>
+                <td>7.73</td><td>7.69</td><td>4.35</td>
+                <td>7.64</td><td>5.05</td><td>2.82</td>
+                <td>13.83</td><td>7.39</td><td>5.00</td>
+                <td>18.50</td><td>10.29</td><td>4.92</td>
+              </tr>
+              <tr>
+                <td class="model-name" style="padding-left:1.2rem;">Llama-3-8B</td>
+                <td>7.73</td>
+                <td>6.72</td><td>5.88</td><td>1.39</td>
+                <td>7.57</td><td>4.96</td><td>4.86</td>
+                <td>8.20</td><td>6.08</td><td>4.22</td>
+                <td>12.71</td><td>7.35</td><td>1.64</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
+
+      <!-- Insight box for accuracy table -->
+      <div class="content has-text-justified" style="margin-top: 1.5rem;">
+        <div class="insight-box">
+          <p>
+            <b>Key Findings:</b> All agents use the same tool set and interact with the same retrieval system,
+            so performance differences primarily reflect their ability to <b>formulate effective queries and
+              plan multi-step evidence acquisition</b>.
+          </p>
+          <p>
+            Accuracy drops consistently as hop count increases across all models and categories, confirming
+            that multi-hop retrieval planning is fundamentally harder. Even GPT-5, the strongest model,
+            only achieves <b>42.43%</b> overall&mdash;well below 50%&mdash;while oracle experiments with
+            golden evidence clips yield near-perfect accuracy, pinpointing <b>retrieval planning as the
+              primary bottleneck</b>.
+          </p>
+        </div>
+      </div>
+    <div class="content-width-4">
+      <!-- Oracle vs Standard Accuracy Table -->
+      <div class="table-card" style="margin-top: 2.5rem;">
+        <div class="table-card-title">Standard vs. Oracle (Golden Clips) Accuracy</div>
+        <table class="results-table table-oracle">
+          <thead>
+            <tr>
+              <th style="text-align:left; padding-left:1.5rem;">Model</th>
+              <th>Standard Acc (%)</th>
+              <th>Oracle Acc (%)</th>
+              <th>Gap (&Delta;)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="4" class="group-header group-closed">Closed-Source LLMs</td></tr>
+            <tr class="best-row">
+              <td class="model-name" style="padding-left:1.5rem;">GPT-5</td>
+              <td class="highlight-cell">42.43</td>
+              <td class="highlight-cell"><b>100.00</b></td>
+              <td class="gap-cell">57.57</td>
+            </tr>
+            <tr>
+              <td class="model-name" style="padding-left:1.5rem;">Gemini 3 Pro</td>
+              <td>30.97</td><td>99.97</td><td class="gap-cell">69.00</td>
+            </tr>
+            <tr>
+              <td class="model-name" style="padding-left:1.5rem;">GPT-4o</td>
+              <td>19.20</td><td>99.40</td><td class="gap-cell">80.20</td>
+            </tr>
+            <tr>
+              <td class="model-name" style="padding-left:1.5rem;">GPT-4-mini</td>
+              <td>18.27</td><td>98.73</td><td class="gap-cell">80.46</td>
+            </tr>
+            <tr><td colspan="4" class="group-header group-open">Open-Source LLMs</td></tr>
+            <tr class="best-row">
+              <td class="model-name" style="padding-left:1.5rem;">Qwen3-VL-32B</td>
+              <td class="highlight-cell">29.59</td><td>98.56</td><td class="gap-cell">68.97</td>
+            </tr>
+            <tr>
+              <td class="model-name" style="padding-left:1.5rem;">Qwen3-VL-8B</td>
+              <td>18.58</td><td>96.90</td><td class="gap-cell">78.32</td>
+            </tr>
+            <tr>
+              <td class="model-name" style="padding-left:1.5rem;">Qwen2.5-VL-72B</td>
+              <td>25.30</td><td>98.60</td><td class="gap-cell">73.30</td>
+            </tr>
+            <tr>
+              <td class="model-name" style="padding-left:1.5rem;">Qwen2.5-VL-7B</td>
+              <td>10.41</td><td>97.23</td><td class="gap-cell">86.82</td>
+            </tr>
+            <tr>
+              <td class="model-name" style="padding-left:1.5rem;">Qwen2.5-7B</td>
+              <td>11.10</td><td>97.33</td><td class="gap-cell">86.23</td>
+            </tr>
+            <tr>
+              <td class="model-name" style="padding-left:1.5rem;">Llama-3-8B</td>
+              <td>7.73</td><td>96.89</td><td class="gap-cell">89.16</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </section>
+      <!-- Insight box for oracle table -->
+      <div class="content has-text-justified" style="margin-top: 1.2rem;">
+        <div class="insight-box">
+          <p>
+            <b>Oracle Analysis:</b> When agents receive <b>golden evidence clips</b> directly, all models achieve
+            near-perfect accuracy (96&ndash;100%), yet standard accuracy remains below 43%. The massive gap
+            (&Delta; = 57&ndash;89 points) confirms that <b>retrieval planning&mdash;not answer
+            generation&mdash;is the primary bottleneck</b> in multi-hop long-video QA.
+          </p>
+        </div>
+      </div>
 
-  <section class="section">
-    <div class="container is-max-widescreen">
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          <h2 class="title is-3">Leaderboard</h2>
-          <div class="content has-text-justified">
-
-  <!-- Comparison Table Section -->
-  <img src="./static/images/leaderboard1.png" alt="LoVR Leaderboard1" />
-  <p class="has-text-centered" style="font-size: 14px; color: #666; margin-top: 10px;">
-    Baseline performance of text-to-video and text-to-clip retrieval on the LoVR benchmark.
-  </p>
-  <hr style="border: 0; height: 1px; background-color: #f0f0f0; margin: 30px 0;">
-  <p>
-
-    <img src="./static/images/leaderboard2.png" alt="LoVR Leaderboard2" />
-    <p class="has-text-centered" style="font-size: 14px; color: #666; margin-top: 10px;">
-      Baseline performance of video-to-text and clip-to-text retrieval on the LoVR benchmark.
-    </p>
-    <hr style="border: 0; height: 1px; background-color: #f0f0f0; margin: 30px 0;">
-    <p>
-
-    </div>
-  </div>
-</div>
-</div>
+  <section class="section" style="padding-top: 0;">
+    <div class="content-width-2">
+      <h2 class="title is-3 has-text-centered">Human Verification vs. LLM Majority Vote</h2>
+    <div class="content-width-3">
+      
+    
+      <!-- Human Verification Table -->
+      <div class="table-card" style="margin-top: 2.5rem;">
+        <div class="table-card-title"> Human Verification vs. LLM Majority Vote</div>
+        <table class="results-table table-verify">
+          <thead>
+            <tr>
+              <th style="text-align:left; padding-left:1.2rem;">Model</th>
+              <th>Checked</th>
+              <th>Disagree</th>
+              <th>Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="4" class="group-header group-closed">Closed-Source LLMs</td></tr>
+            <tr>
+              <td class="model-name" style="padding-left:1.2rem;">GPT-5</td>
+              <td>598</td><td>3</td><td>0.50%</td>
+            </tr>
+            <tr>
+              <td class="model-name" style="padding-left:1.2rem;">Gemini 3 Pro</td>
+              <td>601</td><td>5</td><td>0.83%</td>
+            </tr>
+            <tr>
+              <td class="model-name" style="padding-left:1.2rem;">GPT-4o</td>
+              <td>617</td><td>6</td><td>0.97%</td>
+            </tr>
+            <tr>
+              <td class="model-name" style="padding-left:1.2rem;">GPT-4-mini</td>
+              <td>628</td><td>6</td><td>0.96%</td>
+            </tr>
+            <tr><td colspan="4" class="group-header group-open">Open-Source LLMs</td></tr>
+            <tr>
+              <td class="model-name" style="padding-left:1.2rem;">Qwen3-VL-32B</td>
+              <td>607</td><td>3</td><td>0.49%</td>
+            </tr>
+            <tr>
+              <td class="model-name" style="padding-left:1.2rem;">Qwen3-VL-8B</td>
+              <td>613</td><td>6</td><td>0.98%</td>
+            </tr>
+            <tr>
+              <td class="model-name" style="padding-left:1.2rem;">Qwen2.5-VL-72B</td>
+              <td>620</td><td>4</td><td>0.65%</td>
+            </tr>
+            <tr>
+              <td class="model-name" style="padding-left:1.2rem;">Qwen2.5-VL-7B</td>
+              <td>628</td><td>6</td><td>0.96%</td>
+            </tr>
+            <tr>
+              <td class="model-name" style="padding-left:1.2rem;">Qwen2.5-7B</td>
+              <td>631</td><td>7</td><td>1.11%</td>
+            </tr>
+            <tr>
+              <td class="model-name" style="padding-left:1.2rem;">Llama-3-8B</td>
+              <td>629</td><td>8</td><td>1.27%</td>
+            </tr>
+            <tr class="overall-row">
+              <td class="model-name" style="padding-left:1.2rem;"><b>Overall</b></td>
+              <td><b>6,172</b></td><td><b>54</b></td><td><b>0.87%</b></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 </section>
+  <section class="section" style="padding-top: 0;">
+    <div class="content-width-2">
+      <!-- Insight box for verification table -->
+      <div class="content has-text-justified" style="margin-top: 1.2rem;">
+        <div class="insight-box">
+          <p>
+            <b>Evaluation Reliability:</b> Across <b>6,172</b> human-verified samples, the three-judge
+            LLM majority vote disagrees with human annotators in only <b>0.87%</b> of cases, confirming
+            that our automatic evaluation protocol is highly reliable and consistent with expert judgment.
+          </p>
+        </div>
+      </div>
 
-  <section class="section" id="BibTeX">
-    <div class="container is-max-desktop content">
-      <h2 class="title">BibTeX</h2>
-      <pre><code>@article{cai2025lovr,
-        title={LoVR: A Benchmark for Long Video Retrieval in Multimodal Contexts},
-        author={Cai, Qifeng and Liang, Hao and Dong, Hejun and Qiang, Meiyi and An, Ruichuan and Han, Zhaoyang and Zhu, Zhengzhou and Cui, Bin and Zhang, Wentao},
-        journal={arXiv preprint arXiv:2505.13928},
-        year={2025}
-      }
-</code></pre>
     </div>
   </section>
 
+  <!-- Standardized Tools -->
+  <section class="section" style="padding-top: 0;">
+    <div class="content-width">
+      <h2 class="title is-3 has-text-centered">Standardized Tools</h2>
+      <div class="tools-card">
+        <p class="tools-intro">All agents interact with LongVidSearch through the same fixed tool interface:</p>
+        <div class="tool-item">
+          <div class="tool-signature">Search_Clips_In_Video<span class="tool-params">(video_id, query, top_k)</span></div>
+          <div class="tool-desc">Retrieves top-<i>K</i> relevant clips for a textual query within a given video.</div>
+        </div>
+        <div class="tool-item">
+          <div class="tool-signature">Get_Clip_Detail<span class="tool-params">(clip_id)</span></div>
+          <div class="tool-desc">Returns a high-quality caption for the queried clip (used as evidence).</div>
+        </div>
+        <div class="tool-item">
+          <div class="tool-signature">FINAL_ANSWER<span class="tool-params">(answer_text, evidence_clip_ids)</span></div>
+          <div class="tool-desc">Submits the answer and the list of viewed evidence clip IDs.</div>
+        </div>
+        <p class="tools-note">
+          This fixed interface ensures performance differences primarily reflect <b>agentic retrieval
+            planning</b>, not retriever strength or privileged evidence access.
+        </p>
+      </div>
+    </div>
+  </section>
 
+  <!-- BibTeX -->
+  <section class="section" id="BibTeX">
+    <div class="content-width">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>@inproceedings{longvidsearch2026,
+  title     = {LongVidSearch: An Agentic Benchmark for Multi-hop Evidence Retrieval Planning in Long Videos},
+  author    = {Rongyi Yu and Chenyuan Duan and Hao Liang and Haoze Sun and Peng Pei},
+  booktitle = {ACM Multimedia},
+  year      = {2026}
+}</code></pre>
+    </div>
+  </section>
+
+  <!-- Footer -->
   <footer class="footer">
     <div class="container">
       <div class="content has-text-centered">
-        <a class="icon-link" href="https://arxiv.org/pdf/2505.13928">
+        <a class="icon-link" href="https://arxiv.org/abs/2603.14468">
           <i class="fas fa-file-pdf"></i>
         </a>
-        <a class="icon-link" href="https://github.com/TechNomad-ds/LoVR-benchmark" class="external-link">
+        <a class="icon-link" href="https://github.com/yrywill/LongVidSearch" class="external-link">
           <i class="fab fa-github"></i>
         </a>
       </div>
       <div class="columns is-centered">
         <div class="column is-8">
-          <div class="content">
-            <p>
-              This website is licensed under a <a rel="license"
-                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
-                Commons Attribution-ShareAlike 4.0 International License</a>.
-              This website is based on the template from <a
-                href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>. We sincerely thank them for their
-              great work.
+          <div class="content has-text-centered">
+            <p style="font-size: 0.85rem; color: #999;">
+              This website is based on the template from
+              <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+              Licensed under <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA
+                4.0</a>.
             </p>
           </div>
         </div>
       </div>
     </div>
   </footer>
+
 </body>
 
 </html>
